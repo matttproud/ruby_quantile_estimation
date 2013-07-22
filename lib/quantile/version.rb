@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require_relative 'quantile/quantile'
-require_relative 'quantile/estimator'
-require_relative 'quantile/version'
-
+module Quantile
+  VERSION = '0.0.1'
+end
