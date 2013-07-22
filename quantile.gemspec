@@ -1,4 +1,4 @@
-require './lib/quantile'
+require './lib/quantile/version'
 
 Gem::Specification.new do |gem|
   gem.name    = 'quantile'
