@@ -1,6 +1,8 @@
+require './lib/quantile/version'
+
 Gem::Specification.new do |gem|
   gem.name    = 'quantile'
-  gem.version = '0.0.1'
+  gem.version = Quantile::VERSION
   gem.date    = '2013-07-22'
 
   gem.summary = "Streaming Quantile Estimation"
