@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency('rake')
   gem.add_development_dependency('rspec', [">= 2.0.0"])
 
-  gem.files = Dir['{lib/**/*', 'README*', 'LICENSE*'] & `git ls-files -z`.split("\0")
+  gem.files = Dir['lib/quantile.rb', 'lib/quantile/quantile.rb', 'lib/quantile/estimator.rb', 'lib/quantile/version.rb', 'README*', 'LICENSE*'] & `git ls-files -z`.split("\0")
 end
 
