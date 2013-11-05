@@ -41,7 +41,6 @@ module Quantile
       @head = nil
 
       @observations = 0
-      @items = 0
     end
 
     #
@@ -142,7 +141,6 @@ module Quantile
 
     def record(value, rank, delta, successor)
       @observations += 1
-      @items += 1
 
       return Sample.new(value, rank, delta, successor)
     end
