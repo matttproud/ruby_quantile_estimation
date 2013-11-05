@@ -4,7 +4,7 @@ Gem::Specification.new do |gem|
   gem.name    = 'quantile'
   gem.version = Quantile::VERSION
   gem.date    = '2013-07-22'
-  gem.license = ['Apache 2.0']
+  gem.license = 'Apache 2.0'
 
   gem.summary = 'Streaming Quantile Estimation'
   gem.description = "Graham Cormode and S. Muthukrishnan's Effective Computation of Biased Quantiles over Data Streams in ICDE’05"
