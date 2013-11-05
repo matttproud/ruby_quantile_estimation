@@ -103,6 +103,10 @@ module Quantile
 
     private
 
+    BUFFER_SIZE = 512
+
+    class Sample < Struct.new(:value, :rank, :delta, :successor); end
+
     def flush
       @buffer.sort!
       replace_batch
@@ -140,7 +144,7 @@ module Quantile
       @observations += 1
       @items += 1
 
-      return Sample.new(value,rank,delta, successor)
+      return Sample.new(value, rank, delta, successor)
     end
 
     def invariant(rank, n)
@@ -175,23 +179,4 @@ module Quantile
       end
     end
   end
-
-  private
-
-  BUFFER_SIZE = 512
-
-  class Sample
-    attr_accessor :value
-    attr_accessor :rank
-    attr_accessor :delta
-    attr_accessor :successor
-
-    def initialize(value, rank, delta, successor)
-      @value = value
-      @rank = rank
-      @delta = delta
-      @successor = successor
-    end
-  end
 end
-
