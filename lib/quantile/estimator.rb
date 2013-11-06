@@ -105,6 +105,7 @@ module Quantile
     class Sample < Struct.new(:value, :rank, :delta, :successor); end
 
     def flush
+      return if @buffer.empty?
       @buffer.sort!
       replace_batch
       @buffer.clear

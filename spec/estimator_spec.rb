@@ -41,5 +41,11 @@ describe Quantile::Estimator do
       estimator.query(0.5).should == 0.6
       estimator.query(0.9).should == 0.8
     end
+
+    it 'handles calls without prior observations' do
+      expect do
+        estimator.observe(0.8)
+      end.to change { estimator.query(0.5) }.from(0).to(0.8)
+    end
   end
 end
