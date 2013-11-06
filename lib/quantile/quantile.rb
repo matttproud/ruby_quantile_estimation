@@ -18,6 +18,8 @@ module Quantile
   # @note {Quantile} is concurrency-safe.
   #
   class Quantile
+    include Comparable
+
     attr_reader :quantile
     attr_reader :inaccuracy
 
@@ -49,6 +51,16 @@ module Quantile
 
       return @coefficient_ii * rank
     end
+
+    #
+    # Compare the given other quantile.
+    #
+    # @return [Fixnum] -1, 0, +1 or nil depending on whether the other quantile
+    # is less than, equal to, or greater than self. This is the basis for the
+    # tests in Comparable.
+    #
+    def <=>(other)
+      self.quantile <=> other.quantile && self.inaccuracy <=> other.inaccuracy
+    end
   end
 end
-

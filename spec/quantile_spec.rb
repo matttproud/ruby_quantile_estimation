@@ -17,4 +17,18 @@ describe Quantile::Quantile do
       quantile.delta(0.9, 2).should < 0.23
     end
   end
+
+  describe '#==' do
+    it 'returns true if two objects describe the same quantile and accuracy' do
+      a, b = Quantile::Quantile.new(0.4, 0.007), Quantile::Quantile.new(0.4, 0.007)
+
+      a.should == b
+    end
+
+    it 'returns false if two objects do not have the same properties' do
+      a, b = Quantile::Quantile.new(0.4, 0.007), Quantile::Quantile.new(0.4, 0.0071)
+
+      a.should_not == b
+    end
+  end
 end
