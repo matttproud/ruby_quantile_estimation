@@ -80,15 +80,13 @@ module Quantile
       flush
 
       current = @head
-      if current.nil?
-        return 0
-      end
+      return 0 unless current
 
       mid_rank = (rank * @observations).floor
       max_rank = mid_rank + (invariant(mid_rank, @observations) / 2).floor
 
       rank = 0.0
-      while !current.successor.nil?
+      while current.successor
         rank += current.rank
         if rank + current.successor.rank + current.successor.delta > max_rank
           return current.value
@@ -114,9 +112,7 @@ module Quantile
     end
 
     def replace_batch
-      if @head.nil?
-        @head = record(@buffer.shift, 1, 0, nil)
-      end
+      @head ||= record(@buffer.shift, 1, 0, nil)
 
       rank = 0.0
       current = @head
@@ -126,12 +122,12 @@ module Quantile
           @head = record(s, 1, 0, @head)
         end
 
-        while !current.successor.nil? && current.successor.value < s
+        while current.successor && current.successor.value < s
           rank += current.rank
           current = current.successor
         end
 
-        if current.successor.nil?
+        unless current.successor
           current.successor = record(s, 1, 0, nil)
         end
 
@@ -162,7 +158,7 @@ module Quantile
       rank = 0.0
       current = @head
 
-      while !(current.nil? || current.successor.nil?)
+      while current && current.successor
         if current.rank + current.successor.rank + current.successor.delta <= invariant(rank, @observations)
           removed = current.successor
 
