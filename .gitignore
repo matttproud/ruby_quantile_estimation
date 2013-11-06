@@ -2,7 +2,9 @@
 *.rbc
 .bundle
 .config
+profile/*.html
 coverage
+Gemfile.lock
 InstalledFiles
 lib/bundler/man
 pkg

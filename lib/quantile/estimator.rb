@@ -2,9 +2,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,19 @@ module Quantile
       @head = nil
 
       @observations = 0
-      @items = 0
+    end
+
+    #
+    # Get the quantile targets.
+    #
+    attr_accessor :invariants
+
+    #
+    # Get the number of observed values.
+    #
+    def observations
+      flush
+      @observations
     end
 
     #
@@ -68,15 +80,13 @@ module Quantile
       flush
 
       current = @head
-      if current.nil?
-        return 0
-      end
+      return 0 unless current
 
       mid_rank = (rank * @observations).floor
       max_rank = mid_rank + (invariant(mid_rank, @observations) / 2).floor
 
       rank = 0.0
-      while !current.successor.nil?
+      while current.successor
         rank += current.rank
         if rank + current.successor.rank + current.successor.delta > max_rank
           return current.value
@@ -90,7 +100,12 @@ module Quantile
 
     private
 
+    BUFFER_SIZE = 512
+
+    class Sample < Struct.new(:value, :rank, :delta, :successor); end
+
     def flush
+      return if @buffer.empty?
       @buffer.sort!
       replace_batch
       @buffer.clear
@@ -98,9 +113,7 @@ module Quantile
     end
 
     def replace_batch
-      if @head.nil?
-        @head = record(@buffer.shift, 1, 0, nil)
-      end
+      @head ||= record(@buffer.shift, 1, 0, nil)
 
       rank = 0.0
       current = @head
@@ -110,12 +123,12 @@ module Quantile
           @head = record(s, 1, 0, @head)
         end
 
-        while !current.successor.nil? && current.successor.value < s
+        while current.successor && current.successor.value < s
           rank += current.rank
           current = current.successor
         end
 
-        if current.successor.nil?
+        unless current.successor
           current.successor = record(s, 1, 0, nil)
         end
 
@@ -125,9 +138,8 @@ module Quantile
 
     def record(value, rank, delta, successor)
       @observations += 1
-      @items += 1
 
-      return Sample.new(value,rank,delta, successor)
+      return Sample.new(value, rank, delta, successor)
     end
 
     def invariant(rank, n)
@@ -147,7 +159,7 @@ module Quantile
       rank = 0.0
       current = @head
 
-      while !(current.nil? || current.successor.nil?)
+      while current && current.successor
         if current.rank + current.successor.rank + current.successor.delta <= invariant(rank, @observations)
           removed = current.successor
 
@@ -162,23 +174,4 @@ module Quantile
       end
     end
   end
-
-  private
-
-  BUFFER_SIZE = 512
-
-  class Sample
-    attr_accessor :value
-    attr_accessor :rank
-    attr_accessor :delta
-    attr_accessor :successor
-
-    def initialize(value, rank, delta, successor)
-      @value = value
-      @rank = rank
-      @delta = delta
-      @successor = successor
-    end
-  end
 end
-
