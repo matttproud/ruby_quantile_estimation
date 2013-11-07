@@ -74,13 +74,14 @@ module Quantile
     # @param rank [Float] The target quantile to retrieve.  It *must* be one of
     #                     the invariants provided in the constructor.
     #
-    # @return [Numeric]  The quantile value for the rank.
+    # @return [Numeric, nil]  The quantile value for the rank or nil if no
+    #   observations are present.
     #
     def query(rank)
       flush
 
       current = @head
-      return 0 unless current
+      return unless current
 
       mid_rank = (rank * @observations).floor
       max_rank = mid_rank + (invariant(mid_rank, @observations) / 2).floor
