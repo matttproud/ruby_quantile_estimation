@@ -32,14 +32,24 @@ describe Quantile::Estimator do
     end
   end
 
+  describe '#observations' do
+    it 'returns the numer of recorded observations' do
+      expect do
+        42.times { estimator.observe(rand) }
+      end.to change { estimator.observations }.from(0).to(42)
+    end
+  end
+
   describe '#query' do
     it 'returns the current quantile value for a given rank' do
       estimator.observe(0.8)
       estimator.observe(0.4)
+      estimator.observe(0.9)
       estimator.observe(0.6)
 
       estimator.query(0.5).should == 0.6
       estimator.query(0.9).should == 0.8
+      estimator.query(0.99).should == 0.8
     end
 
     it 'returns nil if no observations are available' do

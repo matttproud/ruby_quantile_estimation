@@ -66,6 +66,7 @@ module Quantile
       if @buffer.size == BUFFER_SIZE
         flush
       end
+      @observations += 1
     end
 
     #
@@ -138,8 +139,6 @@ module Quantile
     end
 
     def record(value, rank, delta, successor)
-      @observations += 1
-
       return Sample.new(value, rank, delta, successor)
     end
 
