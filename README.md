@@ -23,6 +23,12 @@ end
 
 # Retrieve the value of a given quantile
 estimator.query(0.5)
+
+# Retrieve the number of observations
+estimator.observations
+
+# Get the sum of all observed values.
+estimator.sum
 ```
 
 ## Tests [![Build Status][2]][3]

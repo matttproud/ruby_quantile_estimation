@@ -40,6 +40,14 @@ describe Quantile::Estimator do
     end
   end
 
+  describe '#sum' do
+    it 'returns the sum of all observed values' do
+      expect do
+        42.times { |i| estimator.observe(i + 1) }
+      end.to change { estimator.sum }.from(0).to(903)
+    end
+  end
+
   describe '#query' do
     it 'returns the current quantile value for a given rank' do
       estimator.observe(0.8)
