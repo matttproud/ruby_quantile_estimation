@@ -40,7 +40,7 @@ module Quantile
       @buffer = []
       @head = nil
 
-      @observations = 0
+      @observations, @sum = 0, 0
     end
 
     #
@@ -67,6 +67,14 @@ module Quantile
         flush
       end
       @observations += 1
+      @sum += value
+    end
+
+    #
+    # Returns the sum of all observed values.
+    #
+    def sum
+      @sum
     end
 
     #

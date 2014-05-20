@@ -2,8 +2,11 @@ source 'https://rubygems.org'
 
 gemspec
 
-group :development do
+group :development, :test do
   gem 'rake'
+end
+
+group :development do
   gem 'ruby-prof'
 end
 
