@@ -138,11 +138,12 @@ module Quantile
           current = current.successor
         end
 
-        unless current.successor
+        if current.successor
+          current.successor = record(s, 1, invariant(rank, @observations)-1, current.successor)
+        else
           current.successor = record(s, 1, 0, nil)
         end
-
-        current.successor = record(s, 1, invariant(rank, @observations)-1, current.successor)
+        current = current.successor
       end
     end
 
