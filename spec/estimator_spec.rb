@@ -58,6 +58,14 @@ describe Quantile::Estimator do
       expect(estimator.query(0.99)).to eq(0.8)
     end
 
+    it 'flushes observations correctly' do
+      100_000.times { |i| estimator.observe(i) }
+
+      expect(estimator.query(0.5)).to be_within(5).percent_of(50_000)
+      expect(estimator.query(0.9)).to be_within(1).percent_of(90_000)
+      expect(estimator.query(0.99)).to be_within(0.1).percent_of(99_000)
+    end
+
     it 'returns nil if no observations are available' do
       expect(estimator.query(0.9)).to eq(nil)
     end
