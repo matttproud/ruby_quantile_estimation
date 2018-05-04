@@ -5,21 +5,19 @@ describe Quantile::Estimator do
 
   describe '.new' do
     it 'returns a new Estimator with default quantiles' do
-      estimator = Quantile::Estimator.new
-
-      estimator.should have(3).invariants
-      estimator.invariants[0].quantile.should == 0.5
-      estimator.invariants[1].quantile.should == 0.9
-      estimator.invariants[2].quantile.should == 0.99
+      expect(estimator.invariants.size).to eq(3)
+      expect(estimator.invariants[0].quantile).to eq(0.5)
+      expect(estimator.invariants[1].quantile).to eq(0.9)
+      expect(estimator.invariants[2].quantile).to eq(0.99)
     end
 
     it 'accepts custom quantiles' do
       quantiles = [0.7, 0.8].map { |q| Quantile::Quantile.new(q, rand) }
       estimator = Quantile::Estimator.new(*quantiles)
 
-      estimator.should have(quantiles.size).invariants
+      expect(estimator.invariants.size).to eq(quantiles.size)
       quantiles.each_with_index do |quantile, i|
-        estimator.invariants[i].should == quantile
+        expect(estimator.invariants[i]).to eq(quantile)
       end
     end
   end
@@ -28,7 +26,7 @@ describe Quantile::Estimator do
     it 'records a given float value' do
       estimator.observe(rand)
 
-      estimator.observations.should == 1
+      expect(estimator.observations).to eq(1)
     end
   end
 
@@ -55,13 +53,13 @@ describe Quantile::Estimator do
       estimator.observe(0.9)
       estimator.observe(0.6)
 
-      estimator.query(0.5).should == 0.6
-      estimator.query(0.9).should == 0.8
-      estimator.query(0.99).should == 0.8
+      expect(estimator.query(0.5)).to eq(0.6)
+      expect(estimator.query(0.9)).to eq(0.8)
+      expect(estimator.query(0.99)).to eq(0.8)
     end
 
     it 'returns nil if no observations are available' do
-      estimator.query(0.9).should == nil
+      expect(estimator.query(0.9)).to eq(nil)
     end
   end
 end
